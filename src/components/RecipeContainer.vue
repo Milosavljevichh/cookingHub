@@ -27,3 +27,20 @@ kanal.onreadystatechange = () => {
     />
   </div>
 </template>
+
+<style scoped>
+#wrapper {
+    width: 100%;
+    padding: 24px 48px;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  /* max-width: 4fr;  */
+}
+
+@media (min-width: 1200px) {
+  #wrapper {
+    grid-template-columns: repeat(4, 1fr); 
+  }
+}
+</style>

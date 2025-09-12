@@ -7,7 +7,15 @@
 
 <template>
   <Header />
-  <Dashboard />
-  <RouterView />
+  <div id="mainContainer">
+    <Dashboard />
+    <RouterView />
+  </div>
   <Footer />
 </template>
+
+<style scoped>
+  #mainContainer{
+    display: flex;
+  }
+</style>

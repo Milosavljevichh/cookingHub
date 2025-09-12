@@ -23,10 +23,10 @@
 </template>
 <style>
     .sidebar{
-      width: 17%;
+      width: 100%;
       min-width: 260px;
       max-width: 340px;
-      height:93vh;
+      min-height:93vh;
       background:var(--dark);
       border-right:2px dashed var(--light);
       display:flex;

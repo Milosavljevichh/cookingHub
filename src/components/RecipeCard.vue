@@ -14,7 +14,8 @@
 <style>
     article{
         background-color: red;
-        width: 150px;
-        height: 150px;
+        width: 100%;
+        height: 100%;
+        min-height: 175px;
     }
 </style>
