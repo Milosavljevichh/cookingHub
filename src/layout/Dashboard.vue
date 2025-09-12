@@ -1,5 +1,6 @@
 <script setup>
-
+    import { RouterLink, useRoute } from 'vue-router';
+    let currentPath = useRoute()
 </script>
 <template>  <aside class="sidebar" role="navigation" aria-label="Glavna navigacija">
     <div>
@@ -11,14 +12,10 @@
       </div>
       <nav>
         <ul class="menu" role="menu" aria-label="Meni">
-          <li role="none">
-            <a href="#menu" class="active" role="menuitem">Menu</a>
-          </li>
-          <li role="none"><a href="#table" role="menuitem">Table Services</a></li>
-          <li role="none"><a href="#reservation" role="menuitem">Reservation</a></li>
-          <li role="none"><a href="#delivery" role="menuitem">Delivery</a></li>
-          <li role="none"><a href="#accounting" role="menuitem">Accounting</a></li>
-          <li role="none"><a href="#settings" role="menuitem">Settings</a></li>
+          <li role="none"><RouterLink to="/" :class="currentPath.path === '/' ? 'active' : ''" role="menuitem">Home</RouterLink></li>
+          <li role="none"><RouterLink to="/kitchens" :class="currentPath.path === '/kitchens' ? 'active' : ''" role="menuitem">Kitchens</RouterLink></li>
+          <li role="none"><RouterLink to="/surprise" :class="currentPath.path === '/surprise' ? 'active' : ''" role="menuitem">Surprise</RouterLink></li>
+          <li role="none"><RouterLink to="/saved" :class="currentPath.path === '/saved' ? 'active' : ''" role="menuitem">Favorite</RouterLink></li>
         </ul>
       </nav>
     </div>
