@@ -2,6 +2,7 @@
   import { RouterView } from 'vue-router';
   import Header from './layout/Header.vue';
   import Footer from './layout/Footer.vue';
+  import Dashboard from './layout/Dashboard.vue';
 
   //!!!NOTE trenutno se ovde dohvata api data, ali ce se pomeriti u vuex
   let kanal = new XMLHttpRequest();
@@ -20,6 +21,7 @@
 
 <template>
   <Header />
+  <Dashboard />
   <RouterView />
   <Footer />
 </template>

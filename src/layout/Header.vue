@@ -26,7 +26,6 @@
     box-sizing: border-box;
     width: 100%;
     height: 7vh;
-    max-height: 100px;
     background-color: var(--primary);
     display: flex;
     align-items: center;
