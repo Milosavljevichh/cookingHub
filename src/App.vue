@@ -15,7 +15,9 @@
   <Header :changeText="changeText" />
   <div id="mainContainer">
     <Dashboard />
-    <RouterView :search="searchText" />
+    <div>
+      <RouterView :search="searchText" />
+    </div>
   </div>
   <Footer />
 </template>
