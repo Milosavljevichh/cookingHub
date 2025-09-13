@@ -20,6 +20,7 @@ function fetchRecipes(query) {
         if (kanal.readyState === 4 && kanal.status === 200) {
             let data = JSON.parse(kanal.responseText)
             recipes.value = data.meals || []
+            console.log(recipes.value[0])
         }
     }
     
@@ -38,6 +39,9 @@ watch(() => props.searchText,
       v-for="recipe in recipes"
       :key="recipe.idMeal"
       :title="recipe.strMeal"
+      :thumb="recipe.strMealThumb"
+      :category="recipe.strCategory"
+      :area="recipe.strArea"
     />
   </div>
 </template>
@@ -47,7 +51,7 @@ watch(() => props.searchText,
     width: 100%;
     padding: 24px 48px;
   display: grid;
-  gap: 1rem;
+  gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   /* max-width: 4fr;  */
 }
