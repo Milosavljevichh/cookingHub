@@ -3,6 +3,7 @@ import Home from "@/views/Home.vue";
 import Kitchen from "@/views/Kitchen.vue";
 import Random from "@/views/Random.vue";
 import Saved from "@/views/Saved.vue";
+import Recipe from "@/views/Recipe.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
             path:'/saved',
             name:'saved',
             component: Saved
+        },
+        {
+            path:'/recipe/:id',
+            name:'recipe',
+            component: Recipe
         }
     ]
 })

@@ -20,7 +20,6 @@ function fetchRecipes(query) {
         if (kanal.readyState === 4 && kanal.status === 200) {
             let data = JSON.parse(kanal.responseText)
             recipes.value = data.meals || []
-            console.log(recipes.value[0])
         }
     }
     
@@ -42,6 +41,8 @@ watch(() => props.searchText,
       :thumb="recipe.strMealThumb"
       :category="recipe.strCategory"
       :area="recipe.strArea"
+      :video="recipe.strYoutube"
+      :id="recipe.idMeal"
     />
   </div>
 </template>

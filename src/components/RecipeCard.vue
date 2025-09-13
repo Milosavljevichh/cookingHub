@@ -1,10 +1,13 @@
 <script setup>
     import { defineProps } from 'vue';
+    import { RouterLink } from 'vue-router';
     const props = defineProps({
         title: String,
         thumb: String,
         category: String,
-        area: String
+        area: String,
+        video: String,
+        id: String
     })
 </script>
 
@@ -17,8 +20,8 @@
     <div class="card__title">{{title}}</div>
     <div class="card__subtitle">{{ category }} - {{ area }}</div>
     <div class="card__wrapper">
-        <button class="card__btn">Video</button>
-        <button class="card__btn card__btn-solid">Article</button>
+        <a :href="video" target="_blank"><button class="card__btn">Video</button></a>
+        <RouterLink :to="'/recipe/' + id" class="card__btn card__btn-solid">Article</RouterLink>
     </div>
 </article>
 </template>
@@ -94,12 +97,11 @@
 
 .card__btn {
   margin-top: 15px;
-  width: 76px;
-  height: 31px;
+    padding: 6px 12px;
   border: 2px solid var(--main-color);
   border-radius: 4px;
   font-weight: 700;
-  font-size: 11px;
+  font-size: 0.8rem;
   color: var(--main-color);
   background: var(--bg-color);
   text-transform: uppercase;
@@ -114,6 +116,7 @@
   background: var(--main-color);
   color: var(--bg-color);
   margin-left: 18px;
+  text-decoration: none;
 }
 
 .card__btn:hover {
