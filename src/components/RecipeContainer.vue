@@ -1,21 +1,35 @@
 <script setup>
 import RecipeCard from './RecipeCard.vue'
-import { ref } from 'vue';
+import { ref, defineProps, watch } from 'vue';
+
+const props = defineProps({
+    searchText:{
+        type: String,
+        default: ''
+    }
+})
 
 //!!!NOTE trenutno se ovde dohvata api data, ali ce se pomeriti u vuex
-let kanal = new XMLHttpRequest();
+let recipes = ref([])
 
-const recipes = ref([])
-
-kanal.open('GET', 'https://themealdb.com/api/json/v1/1/search.php?s=', true)
-kanal.send()
-kanal.onreadystatechange = () => {
-    if (kanal.readyState === 4 && kanal.status === 200) {
-    let data = JSON.parse(kanal.responseText)
-    recipes.value = data.meals
-    console.log(recipes.value)
+function fetchRecipes(query) {
+    const kanal = new XMLHttpRequest()
+    kanal.open('GET', 'https://themealdb.com/api/json/v1/1/search.php?s=' + query, true)
+    kanal.send()
+    kanal.onreadystatechange = () => {
+        if (kanal.readyState === 4 && kanal.status === 200) {
+            let data = JSON.parse(kanal.responseText)
+            recipes.value = data.meals || []
+        }
     }
+    
 }
+fetchRecipes(props.searchText)
+
+watch(() => props.searchText,
+    (newVal) => {
+        fetchRecipes(newVal)
+    })
 </script>
 
 <template>
