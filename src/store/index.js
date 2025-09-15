@@ -64,6 +64,23 @@ export default createStore({
       } finally {
         commit('setLoading', false)
       }
+    },
+    async fetchSavedRecipes({ state, commit }) {
+      commit('setLoading', true)
+      try {
+        const promises = state.favorites.map(id =>
+          fetch('https://themealdb.com/api/json/v1/1/lookup.php?i=' + id)
+            .then(res => res.json())
+            .then(data => data.meals ? data.meals[0] : null)
+        );
+        const recipes = (await Promise.all(promises)).filter(Boolean);
+        commit('setRecipes', recipes);
+        commit('setError', null);
+      } catch (e) {
+        commit('setError', e);
+      } finally {
+        commit('setLoading', false);
+      }
     }
   },
   getters: {
@@ -73,6 +90,10 @@ export default createStore({
     favorites: state => state.favorites,
     user: state => state.user,
     loading: state => state.loading,
-    error: state => state.error
+    error: state => state.error,
+    favoriteRecipes: state => {
+      // Return recipe objects for favorited IDs
+      return state.recipes.filter(r => state.favorites.includes(r.idMeal))
+    }
   }
 })

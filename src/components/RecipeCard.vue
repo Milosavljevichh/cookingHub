@@ -1,6 +1,9 @@
 <script setup>
     import { defineProps } from 'vue';
     import { RouterLink } from 'vue-router';
+    import { useStore } from 'vuex';
+    import { computed } from 'vue';
+
     const props = defineProps({
         title: String,
         thumb: String,
@@ -9,20 +12,37 @@
         video: String,
         id: String
     })
+
+    const store = useStore();
+    const isFavorited = computed(() => store.state.favorites.includes(props.id));
+
+    function toggleFavorite() {
+      if (isFavorited.value) {
+        store.commit('removeFavorite', props.id);
+      } else {
+        store.commit('addFavorite', props.id);
+      }
+    }
 </script>
 
 <template>
 <article class="card">
-    <div class="card__img">
-        <img :src="thumb" :alt="title">
-    </div>
-    <div class="card__avatar"><div></div></div>
-    <div class="card__title">{{title}}</div>
-    <div class="card__subtitle">{{ category }} - {{ area }}</div>
-    <div class="card__wrapper">
-        <a :href="video" target="_blank"><button class="card__btn">Video</button></a>
-        <RouterLink :to="'/recipe/' + id" class="card__btn card__btn-solid">Article</RouterLink>
-    </div>
+  <div class="card__img">
+    <img :src="thumb" :alt="title">
+  </div>
+  <div class="card__avatar">
+    <div
+    :style="{ backgroundImage: isFavorited ? 'url(/public/img/heart_full.png)' : 'url(/public/img/heart.png)' }"
+    @click="toggleFavorite"
+    title="Toggle favorite"
+    ></div>
+  </div>
+  <div class="card__title">{{title}}</div>
+  <div class="card__subtitle">{{ category }} - {{ area }}</div>
+  <div class="card__wrapper">
+    <a :href="video" target="_blank"><button class="card__btn">Video</button></a>
+    <RouterLink :to="'/recipe/' + id" class="card__btn card__btn-solid">Article</RouterLink>
+  </div>
 </article>
 </template>
 
