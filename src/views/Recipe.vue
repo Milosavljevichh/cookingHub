@@ -1,85 +1,76 @@
 <script setup>
-    import {useRoute} from 'vue-router'
-    import { ref } from 'vue'
+    import { useRoute } from 'vue-router'
+    import { computed, onMounted } from 'vue'
+    import { useStore } from 'vuex'
 
-    const id = ref(useRoute().params.id)
-    let recipes = ref([])
+    const route = useRoute()
+    const store = useStore()
 
-    function fetchRecipe(query) {
-        const kanal = new XMLHttpRequest()
-        kanal.open('GET', 'https://themealdb.com/api/json/v1/1/lookup.php?i=' + query, true)
-        kanal.send()
-        console.log('nesto')
-        kanal.onreadystatechange = () => {
-            if (kanal.readyState === 4 && kanal.status === 200) {
-                let data = JSON.parse(kanal.responseText)
-                recipes.value = data.meals || []
-                console.log(recipes.value)
-            }
-        }
-        
-    }
-    fetchRecipe(id.value)
+    const selectedRecipe = computed(() => store.getters.selectedRecipe)
+
+    onMounted(() => {
+      store.dispatch('fetchRecipeById', route.params.id)
+    })
     
-    // funkcija koja spaja sastojke i mere
+        // funkcija koja spaja sastojke i mere
 const getIngredients = (recipe) => {
-  const ingredients = []
-  for (let i = 1; i <= 20; i++) {
-    const ingredient = recipe[`strIngredient${i}`]
-    const measure = recipe[`strMeasure${i}`]
-    if (ingredient && ingredient.trim() !== "") {
-      ingredients.push(`${measure} ${ingredient}`)
+    const ingredients = []
+    for (let i = 1; i <= 20; i++) {
+        const ingredient = recipe[`strIngredient${i}`]
+        const measure = recipe[`strMeasure${i}`]
+        if (ingredient && ingredient.trim() !== "") {
+            ingredients.push(`${measure} ${ingredient}`)
+        }
     }
-  }
-  return ingredients
+    return ingredients
 }
 
 // instrukcije podelimo po redovima (ako je odvojeno sa \r\n ili STEP)
 const getInstructions = (recipe, i) => {
-  return recipe.strInstructions
-    ? recipe.strInstructions.split(/(?:\r?\n|STEP\s*\d+)/i).filter(line => line.trim() !== "")
-    : []
+    return recipe.strInstructions
+        ? recipe.strInstructions.split(/(?:\r?\n|STEP\s*\d+)/i).filter(line => line.trim() !== "")
+        : []
 }
 </script>
 <template>
-  <section v-if="recipes.length" class="preperations">
-    <div class="img_container">
-      <img :src="recipes[0].strMealThumb" :alt="recipes[0].strMeal" />
-    </div>
-    <div>
-        <div class="recipe_heading">
-          <h1 id="main_heading">{{ recipes[0].strMeal }}</h1>
-          <p>Category: {{ recipes[0].strCategory }} | Area: {{ recipes[0].strArea }}</p>
+    <section v-if="selectedRecipe" class="preperations">
+        <div class="img_container">
+            <img :src="selectedRecipe.strMealThumb" :alt="selectedRecipe.strMeal" />
         </div>
+        <div>
+                <div class="recipe_heading">
+                    <h1 id="main_heading">{{ selectedRecipe.strMeal }}</h1>
+                    <p>Category: {{ selectedRecipe.strCategory }} | Area: {{ selectedRecipe.strArea }}</p>
+                </div>
     
-        <div class="ingredients">
-          <div class="ingredients_heading">
-            <h2 class="heading">Ingredients</h2>
-          </div>
-          <div class="ingredients_content">
-            <ul>
-              <li v-for="(item, i) in getIngredients(recipes[0])" :key="i">{{ item }}</li>
-            </ul>
-          </div>
+                <div class="ingredients">
+                    <div class="ingredients_heading">
+                        <h2 class="heading">Ingredients</h2>
+                    </div>
+                    <div class="ingredients_content">
+                        <ul>
+                            <li v-for="(item, i) in getIngredients(selectedRecipe)" :key="i">{{ item }}</li>
+                        </ul>
+                    </div>
+                </div>
         </div>
-    </div>
-  </section>
+    </section>
 
-  <section v-if="recipes.length" class="instructions">
-    <div class="instructions_heading">
-      <h2 class="heading">Instructions</h2>
-    </div>
-    <div class="instructions_content">
-      <ol>
-        <li v-for="(step, i) in getInstructions(recipes[0], i)" :key="i">{{ step }}</li>
-      </ol>
-    </div>
+    <section v-if="selectedRecipe" class="instructions">
+        <div class="instructions_heading">
+            <h2 class="heading">Instructions</h2>
+        </div>
+        <div class="instructions_content">
+            <ol>
+                <li v-for="(step, i) in getInstructions(selectedRecipe, i)" :key="i">{{ step }}</li>
+            </ol>
+        </div>
 
-    <div class="extra_links">
-      <a v-if="recipes[0].strSource" :href="recipes[0].strSource" target="_blank">Source</a>
-      <a v-if="recipes[0].strYoutube" :href="recipes[0].strYoutube" target="_blank">Watch on YouTube</a>
-    </div>
-  </section>
+        <div class="extra_links">
+            <a v-if="selectedRecipe.strSource" :href="selectedRecipe.strSource" target="_blank">Source</a>
+            <a v-if="selectedRecipe.strYoutube" :href="selectedRecipe.strYoutube" target="_blank">Watch on YouTube</a>
+        </div>
+    </section>
 </template>
 
 <style scoped>
