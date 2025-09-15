@@ -1,6 +1,7 @@
 <script setup>
   import { RouterView } from 'vue-router';
   import { ref, computed } from 'vue';
+  import store from './store';
   import Header from './layout/Header.vue';
   import Footer from './layout/Footer.vue';
   import Dashboard from './layout/Dashboard.vue';
@@ -9,13 +10,14 @@
   let changeText = (s) => {
     searchText.value = s
   }
+  let isAuth = ref(store.getters.isAuthenticated)
 </script>
 
 <template>
-  <Header :changeText="changeText" />
-  <div id="mainContainer">
+  <Header v-if="isAuth" :changeText="changeText" />
+  <div :class="isAuth ? 'mainContainer' : 'fullHeight'">
     <div id="sidebarWrapper">
-      <Dashboard />
+      <Dashboard v-if="isAuth" />
     </div>
     <div id="contentWrapper">
       <RouterView :search="searchText" />
@@ -25,9 +27,17 @@
 </template>
 
 <style scoped>
-  #mainContainer {
+  .fullHeight {
+    height: 100vh;
+  }
+
+  .headerHeight{
+    height:93vh;
+  }
+
+  .mainContainer {
     display: flex;
-    height: 93vh; 
+    /* height: 93vh;  */
     min-height: 0;
   }
 
