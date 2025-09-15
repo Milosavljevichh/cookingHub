@@ -46,21 +46,22 @@ const getInstructions = (recipe, i) => {
     <div class="img_container">
       <img :src="recipes[0].strMealThumb" :alt="recipes[0].strMeal" />
     </div>
-
-    <div class="recipe_heading">
-      <h1 id="main_heading">{{ recipes[0].strMeal }}</h1>
-      <p>Category: {{ recipes[0].strCategory }} | Area: {{ recipes[0].strArea }}</p>
-    </div>
-
-    <div class="ingredients">
-      <div class="ingredients_heading">
-        <h2 class="heading">Ingredients</h2>
-      </div>
-      <div class="ingredients_content">
-        <ul>
-          <li v-for="(item, i) in getIngredients(recipes[0])" :key="i">{{ item }}</li>
-        </ul>
-      </div>
+    <div>
+        <div class="recipe_heading">
+          <h1 id="main_heading">{{ recipes[0].strMeal }}</h1>
+          <p>Category: {{ recipes[0].strCategory }} | Area: {{ recipes[0].strArea }}</p>
+        </div>
+    
+        <div class="ingredients">
+          <div class="ingredients_heading">
+            <h2 class="heading">Ingredients</h2>
+          </div>
+          <div class="ingredients_content">
+            <ul>
+              <li v-for="(item, i) in getIngredients(recipes[0])" :key="i">{{ item }}</li>
+            </ul>
+          </div>
+        </div>
     </div>
   </section>
 
@@ -82,31 +83,9 @@ const getInstructions = (recipe, i) => {
 </template>
 
 <style scoped>
-:root{
 
-        /* PRIMARY of Heading and Sub-heading */
-    --nutmeg-color: hsl(14, 45%, 36%);
-    --raspberry-color: hsl(332, 51%, 32%);
-
-
-        /* NEUTRAL */
-    --white-color: hsl(0, 0%, 100%);
-    --rosewhite-color: hsl(330, 100%, 98%);
-    --eggshell-color: hsl(30, 54%, 90%);
-    --lightgrey-color: hsl(30, 18%, 87%);
-    --wengebrown-color: hsl(30, 10%, 34%);
-    --darkcharcoal-color: hsl(24, 5%, 18%);
-
-
-        /* Font Family */
-    --heading-font: 'Young Serif', serif;
-    --paragraph-font: 'Outfit', sans-serif;
-
-    
-
-
-    /* UL elements Padding*/
-   /* 40px */
+*{
+    color: var(--light);
 }
 
 h1, h2{
@@ -118,7 +97,7 @@ p{
 }
 
 .heading{
-    color: var(--nutmeg-color);
+    color: var(--light);
 }
 
 .img_container{
@@ -154,7 +133,7 @@ p{
     padding-inline: 3% 3%;
     font-size: 20px;
     margin-bottom: 5px;
-    color: var(--raspberry-color);
+    color: var(--light);
 }
 
 .prep_total_time{
@@ -168,16 +147,19 @@ p{
 }
 
 .prep_total_time li::marker{
-    color: var(--raspberry-color);
+    color: var(--light);
 }
 
 .prep_total_time span, .instructions_content span{
     font-weight: 600;
-    color: var(--darkcharcoal-color);
+    color: var(--light);
 }
 
 .preperations{
-    margin: 0 35px 0 35px;
+    margin: 45px 35px 0 35px;
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 0 35px;
 }
 
 .ingredients{
@@ -190,7 +172,7 @@ p{
 }
 
 .ingredients_content li::marker , .instructions_content li::marker{
-    color: var(--nutmeg-color);
+    color: var(--light);
     font-weight: 600;
 }
 
@@ -200,8 +182,8 @@ p{
 }
 
 .instructions{
-    border-top: 1px solid var(--lightgrey-color);
-    margin: 0 35px 0 35px
+    border-top: 1px solid var(--light);
+    margin: 0 35px 45px 35px
 }
 
 .instructions_content li{
@@ -213,7 +195,7 @@ p{
 }
 
 .instructions_content{
-    border-bottom: 1px solid var(--lightgrey-color);
+    border-bottom: 1px solid var(--light);
     padding-bottom: 25px;
 }
 
@@ -236,7 +218,7 @@ table{
 }
 
 tr:nth-child(-n+3){
-    border-bottom: 1px solid var(--lightgrey-color);    
+    border-bottom: 1px solid var(--light);    
 }
 
 th, td{
@@ -311,7 +293,7 @@ main{
 }
 
 tbody td{
-    color: var(--nutmeg-color);
+    color: var(--light);
 }
 }
 

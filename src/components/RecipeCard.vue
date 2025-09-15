@@ -30,7 +30,7 @@
 .card {
   --main-color: var(--dark);
   --submain-color: var(--secondary);
-  --bg-color:  #fff;
+  --bg-color:  var(--light);
   position: relative;
   width: 100%;
   height: 384px;
@@ -38,8 +38,8 @@
   flex-direction: column;
   align-items: center;
   border-radius: 20px;
-  background: #fff;
-  border: 2px solid var(--primary);
+  background: var(--light);
+  border: 3px solid var(--primary);
 }
 
 .card__img {

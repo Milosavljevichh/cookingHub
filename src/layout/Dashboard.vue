@@ -25,10 +25,10 @@
     .sidebar{
       width: 100%;
       min-width: 260px;
-      max-width: 340px;
-      min-height:93vh;
+      max-width: 280px;
+      min-height:100%;
       background:var(--dark);
-      border-right:2px dashed var(--light);
+      border-right:2px solid var(--primary);
       display:flex;
       flex-direction:column;
       justify-content:space-between;
@@ -63,7 +63,7 @@
       font-weight:700;
       letter-spacing:0.3px;
       color:#fff;
-      font-size:1.6rem;
+      font-size:1.3rem;
     }
 
     nav{

@@ -14,8 +14,10 @@
 <template>
   <Header :changeText="changeText" />
   <div id="mainContainer">
-    <Dashboard />
-    <div>
+    <div id="sidebarWrapper">
+      <Dashboard />
+    </div>
+    <div id="contentWrapper">
       <RouterView :search="searchText" />
     </div>
   </div>
@@ -23,7 +25,31 @@
 </template>
 
 <style scoped>
-  #mainContainer{
+  #mainContainer {
     display: flex;
+    height: 93vh; 
+    min-height: 0;
   }
+
+  #sidebarWrapper {
+    position: sticky;
+    top: 0;
+    height: calc(100%-120px);
+    z-index: 2;
+    flex-shrink: 0;
+    background: var(--dark);
+  }
+
+  #contentWrapper {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    height: 100%;
+    padding: 0 24px;
+    background: var(--background, #181818);
+  }
+  #contentWrapper::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
 </style>

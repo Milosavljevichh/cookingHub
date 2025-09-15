@@ -54,12 +54,13 @@ watch(() => props.searchText,
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  background-color: var(--dark2);
   /* max-width: 4fr;  */
 }
 
 @media (min-width: 1200px) {
   #wrapper {
-    grid-template-columns: repeat(4, 1fr); 
+    grid-template-columns: repeat(3, 1fr); 
   }
 }
 </style>
