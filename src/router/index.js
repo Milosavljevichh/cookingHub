@@ -8,6 +8,8 @@ import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import store from "@/store"; // Import Vuex store
 
+// Ensure auth is restored before any navigation checks
+store.dispatch('loadUserFromStorage');
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes:[
@@ -52,7 +54,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const publicPages = ['/login', '/register'];
     const authRequired = !publicPages.includes(to.path);
-    const isLoggedIn = store.getters.isAuthenticated;
+    // Use store first, but fall back to localStorage during initial hydration
+    const token = store.getters.token || localStorage.getItem('token');
+    const isLoggedIn = !!token;
 
     if (authRequired && !isLoggedIn) {
         return next('/login');

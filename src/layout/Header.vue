@@ -1,14 +1,21 @@
 <script setup>
-    import { ref } from 'vue';
-    import { useStore } from 'vuex';
+        import { ref } from 'vue';
+        import { useStore } from 'vuex';
+        import { useRouter } from 'vue-router';
 
-    const store = useStore();
+        const store = useStore();
+        const router = useRouter();
     let searchText = ref(store.getters.searchText);
 
     function updateSearchText(val) {
       searchText.value = val;
       store.commit('setSearchText', val);
     }
+
+        function handleLogout() {
+            store.commit('logout');
+            router.push('/login');
+        }
 </script>
 
 <template>
@@ -18,7 +25,7 @@
             <input v-model="searchText" @input="updateSearchText($event.target.value)" placeholder="Search" type="search" name="searchbar" id="searchbar">
         </div>
         <div class="profile">
-            <button id="logout">Log out</button>
+            <button id="logout" @click="handleLogout">Log out</button>
         </div>
     </header>
 </template>
@@ -41,6 +48,11 @@
         color: var(--light);
         font-weight: bold;
         font-size: 1.1rem;
+        transition: all 0.5s;
+    }
+    #logout:hover {
+        cursor: pointer;
+        color: var(--secondary);
     }
 
     .group {

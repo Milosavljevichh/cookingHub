@@ -10,7 +10,8 @@
   let changeText = (s) => {
     searchText.value = s
   }
-  let isAuth = ref(store.getters.isAuthenticated)
+  const isAuth = computed(() => store.getters.isAuthenticated);
+
 </script>
 
 <template>

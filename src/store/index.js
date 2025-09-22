@@ -102,7 +102,7 @@ export default createStore({
       commit('setLoading', true);
       try {
         // Replace with your backend API endpoint
-        const res = await fetch('/api/login', {
+        const res = await fetch('http://localhost:3001/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
@@ -129,7 +129,7 @@ export default createStore({
       commit('setLoading', true);
       try {
         // Replace with your backend API endpoint
-        const res = await fetch('/api/register', {
+        const res = await fetch('http://localhost:3001/api/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, email, password })
