@@ -5,6 +5,8 @@ export default createStore({
       recipes: [],
       randomRecipe: [],
       searchText: '',
+      allAreas: [],
+      selectedArea: null,
       selectedRecipe: null,
       favorites: [],
       user: null,
@@ -16,6 +18,9 @@ export default createStore({
   mutations: {
     setRecipes(state, recipes) {
       state.recipes = recipes
+    },
+    setAllAreas(state, areas) {
+      state.allAreas = areas
     },
     setRandomRecipe(state, recipe) {
       state.randomRecipe = recipe
@@ -181,10 +186,26 @@ export default createStore({
       } finally {
         commit('setLoading', false)
       }
-    }
-  },
+    },
+    async fetchAllAreas({ commit }) {
+      commit('setLoading', true);
+      try {
+        const res = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?a=list')
+        const data = await res.json();
+        commit('setAllAreas', data.meals || []);
+      } catch (e) {
+        commit('setError', e);
+      } finally {
+        commit('setLoading', false);
+      }
+  }
+},
   getters: {
     recipes: state => state.recipes,
+    allAreas: state => state.allAreas.map((area) => (
+      area.strArea
+    )),
+    selectedArea: state => state.selectedArea,
     searchText: state => state.searchText,
     selectedRecipe: state => state.selectedRecipe,
     favorites: state => state.favorites,

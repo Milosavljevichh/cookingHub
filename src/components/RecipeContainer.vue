@@ -37,7 +37,7 @@ watch(searchText, (newVal) => {
     width: 100%;
     padding: 24px 48px;
   display: grid;
-  gap: 2rem;
+  gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   background-color: var(--dark2);
   /* max-width: 4fr;  */
