@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 export default createStore({
     state: {
       recipes: [],
+      randomRecipe: [],
       searchText: '',
       selectedRecipe: null,
       favorites: [],
@@ -15,6 +16,9 @@ export default createStore({
   mutations: {
     setRecipes(state, recipes) {
       state.recipes = recipes
+    },
+    setRandomRecipe(state, recipe) {
+      state.randomRecipe = recipe
     },
     setSearchText(state, text) {
       state.searchText = text
@@ -160,6 +164,22 @@ export default createStore({
         commit('setUser', JSON.parse(user));
         commit('setToken', token);
         commit('setRole', role);
+      }
+    },
+    async getRandomRecipe({ commit }, { router }) {
+      commit('setLoading', true);
+      try {
+        const res = await fetch('https://www.themealdb.com/api/json/v1/1/random.php')
+        const data = await res.json()
+        if (data.meals) {
+          router.push('/recipe/' + data.meals[0].idMeal)
+        } else {
+          commit('setError', 'No random recipe found');
+        }
+      } catch (err) {
+        commit('setError', err);
+      } finally {
+        commit('setLoading', false)
       }
     }
   },

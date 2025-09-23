@@ -1,10 +1,10 @@
 <script setup>
-        import { ref } from 'vue';
-        import { useStore } from 'vuex';
-        import { useRouter } from 'vue-router';
+    import { ref } from 'vue';
+    import { useStore } from 'vuex';
+    import { useRouter } from 'vue-router';
 
-        const store = useStore();
-        const router = useRouter();
+    const store = useStore();
+    const router = useRouter();
     let searchText = ref(store.getters.searchText);
 
     function updateSearchText(val) {
@@ -12,10 +12,10 @@
       store.commit('setSearchText', val);
     }
 
-        function handleLogout() {
-            store.commit('logout');
-            router.push('/login');
-        }
+    function handleLogout() {
+        store.commit('logout');
+        router.push('/login');
+    }
 </script>
 
 <template>

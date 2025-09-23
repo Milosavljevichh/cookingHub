@@ -38,7 +38,7 @@
 
   .mainContainer {
     display: flex;
-    /* height: 93vh;  */
+    height: 93vh; 
     min-height: 0;
   }
 

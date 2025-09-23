@@ -53,7 +53,7 @@ async function handleLogin() {
 .auth-container {
   max-width: 400px;
   margin: 60px auto;
-  height: 100%;
+  height: fit-content;
   padding: 32px;
   background: var(--dark2, #222);
   border-radius: 12px;
