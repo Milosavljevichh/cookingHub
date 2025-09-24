@@ -14,7 +14,8 @@ export default createStore({
       token: null,
       role: null,
       loading: false,
-      error: null
+      error: null,
+      // registeredUsers: []
     },
   mutations: {
     setRecipes(state, recipes) {
@@ -70,8 +71,188 @@ export default createStore({
     setError(state, error) {
       state.error = error
     }
+    // Add a new user to the registered users array
+    // addRegisteredUser(state, user) {
+    //   state.registeredUsers.push(user);
+    //   // Also save to localStorage for persistence across browser sessions
+    //   localStorage.setItem('registeredUsers', JSON.stringify(state.registeredUsers));
+    // },
+    
+    // Load registered users from localStorage on app startup
+    // loadRegisteredUsers(state, users) {
+    //   state.registeredUsers = users;
+    // },
   },
   actions: {
+    async loadandregisterfromstorage({}){
+    // Initialize the store by loading users from localStorage
+    // initializeStore({ commit }) {
+    //   // Load previously registered users from localStorage
+    //   const storedUsers = localStorage.getItem('registeredUsers');
+    //   if (storedUsers) {
+    //     try {
+    //       commit('loadRegisteredUsers', JSON.parse(storedUsers));
+    //     } catch (e) {
+    //       console.error('Failed to load stored users:', e);
+    //       commit('loadRegisteredUsers', []);
+    //     }
+    //   }
+    //   
+    //   // load current user session if exists
+    //   const user = localStorage.getItem('user');
+    //   const token = localStorage.getItem('token');
+    //   const role = localStorage.getItem('role');
+    //   if (user && token && role) {
+    //     commit('setUser', JSON.parse(user));
+    //     commit('setToken', token);
+    //     commit('setRole', role);
+    //     // Load user's favorites from localStorage
+    //     const userFavorites = localStorage.getItem(`favorites_${JSON.parse(user).email}`);
+    //     if (userFavorites) {
+    //       commit('setFavorites', JSON.parse(userFavorites));
+    //     }
+    //   }
+    // },
+    
+    // Register a new user
+    // async storeRegister({ commit, state }, { username, email, password }) {
+    //   commit('setLoading', true);
+    //   commit('setError', null);
+    //   
+    //   try {
+    //     // Validate input
+    //     if (!username || username.includes(' ')) {
+    //       throw new Error('Username is required and cannot contain spaces');
+    //     }
+    //     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+    //       throw new Error('Please enter a valid email address');
+    //     }
+    //     if (!password || password.length < 6) {
+    //       throw new Error('Password must be at least 6 characters');
+    //     }
+    //     
+    //     // Check if user already exists
+    //     const existingUser = state.registeredUsers.find(u => u.email === email);
+    //     if (existingUser) {
+    //       throw new Error('User with this email already exists');
+    //     }
+    //     
+    //     // Create new user object
+    //     const newUser = {
+    //       id: Date.now().toString(), // Simple ID generation (use UUID in real app)
+    //       username,
+    //       email,
+    //       password: btoa(password), // Simple encoding (use proper hashing like bcrypt in real app)
+    //       role: email === 'admin@cookinghub.com' ? 'admin' : 'user', // Make admin if specific email
+    //       createdAt: new Date().toISOString(),
+    //       favorites: [] // Initialize empty favorites for new user
+    //     };
+    //     
+    //     // Add user to registered users
+    //     commit('addRegisteredUser', newUser);
+    //     
+    //     // Generate token for the new user
+    //     commit('generateToken', newUser);
+    //     
+    //     // Set current user data (without password for security)
+    //     const userForSession = {
+    //       id: newUser.id,
+    //       username: newUser.username,
+    //       email: newUser.email,
+    //       role: newUser.role
+    //     };
+    //     
+    //     commit('setUser', userForSession);
+    //     commit('setRole', newUser.role);
+    //     
+    //     // Save session to localStorage
+    //     localStorage.setItem('user', JSON.stringify(userForSession));
+    //     localStorage.setItem('token', state.token);
+    //     localStorage.setItem('role', newUser.role);
+    //     
+    //     // Initialize empty favorites for new user
+    //     commit('setFavorites', []);
+    //     localStorage.setItem(`favorites_${email}`, JSON.stringify([]));
+    //     
+    //     console.log('User registered successfully:', userForSession);
+    //     
+    //   } catch (error) {
+    //     commit('setError', error.message);
+    //     throw error; // Re-throw so component can handle it
+    //   } finally {
+    //     commit('setLoading', false);
+    //   }
+    // },
+    
+    // Login user (store-only, no backend)
+    // async storeLogin({ commit, state }, { email, password }) {
+    //   commit('setLoading', true);
+    //   commit('setError', null);
+    //   
+    //   try {
+    //     // Find user in registered users
+    //     const user = state.registeredUsers.find(u => u.email === email);
+    //     if (!user) {
+    //       throw new Error('User not found. Please register first.');
+    //     }
+    //     
+    //     // Verify password (decode and compare)
+    //     const decodedPassword = atob(user.password);
+    //     if (decodedPassword !== password) {
+    //       throw new Error('Invalid password');
+    //     }
+    //     
+    //     // Generate new token for this session
+    //     commit('generateToken', user);
+    //     
+    //     // Set current user data (without password)
+    //     const userForSession = {
+    //       id: user.id,
+    //       username: user.username,
+    //       email: user.email,
+    //       role: user.role
+    //     };
+    //     
+    //     commit('setUser', userForSession);
+    //     commit('setRole', user.role);
+    //     
+    //     // Save session to localStorage
+    //     localStorage.setItem('user', JSON.stringify(userForSession));
+    //     localStorage.setItem('token', state.token);
+    //     localStorage.setItem('role', user.role);
+    //     
+    //     // Load user's favorites from localStorage
+    //     const userFavorites = localStorage.getItem(`favorites_${email}`);
+    //     if (userFavorites) {
+    //       commit('setFavorites', JSON.parse(userFavorites));
+    //     } else {
+    //       commit('setFavorites', []);
+    //     }
+    //     
+    //     console.log('User logged in successfully:', userForSession);
+    //     
+    //   } catch (error) {
+    //     commit('setError', error.message);
+    //     throw error; // Re-throw so component can handle it
+    //   } finally {
+    //     commit('setLoading', false);
+    //   }
+    // },
+    
+    // Enhanced logout that preserves user's favorites
+    // storeLogout({ commit, state }) {
+    //   // Save current user's favorites before logging out
+    //   if (state.user && state.favorites.length > 0) {
+    //     const userFavoritesKey = `favorites_${state.user.email}`;
+    //     localStorage.setItem(userFavoritesKey, JSON.stringify(state.favorites));
+    //   }
+    //   
+    //   // Clear session data
+    //   commit('logout');
+    //   
+    //   console.log('User logged out successfully');
+    // },
+},
     async fetchRecipes({ commit }, query) {
       commit('setLoading', true)
       try {
