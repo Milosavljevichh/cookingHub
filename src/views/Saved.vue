@@ -9,12 +9,14 @@ const favoriteRecipes = computed(() => store.getters.favoriteRecipes);
 const recipes = computed(() => store.getters.recipes)
 const searchText = computed(() => store.getters.searchText)
 
-onMounted(() => {
-  store.dispatch('fetchRecipes', searchText.value)
+onMounted(async () => {
+	await store.dispatch('fetchFavorites');
+	await store.dispatch('fetchSavedRecipes');
 })
 
-watch(searchText, (newVal) => {
-  store.dispatch('fetchRecipes', newVal)
+watch(searchText, async (newVal) => {
+	// optional: filter saved by search using API or client-side
+	await store.dispatch('fetchSavedRecipes');
 })
 </script>
 

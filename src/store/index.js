@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+const API_BASE = (import.meta && import.meta.env && import.meta.env.VITE_API_URL) || 'http://localhost:3001/api';
 
 export default createStore({
     state: {
@@ -19,6 +20,10 @@ export default createStore({
     setRecipes(state, recipes) {
       state.recipes = recipes
     },
+    setFavorites(state, ids) {
+      state.favorites = ids
+      console.log('Favorites set to:', state.favorites);
+    },
     setAllAreas(state, areas) {
       state.allAreas = areas
     },
@@ -32,12 +37,14 @@ export default createStore({
       state.selectedRecipe = recipe
     },
     addFavorite(state, recipeId) {
-      if (!state.favorites.includes(recipeId)) {
-        state.favorites.push(recipeId)
+      const rid = String(recipeId)
+      if (!state.favorites.includes(rid)) {
+        state.favorites.push(rid)
       }
     },
     removeFavorite(state, recipeId) {
-      state.favorites = state.favorites.filter(id => id !== recipeId)
+      const rid = String(recipeId)
+      state.favorites = state.favorites.filter(id => id !== rid)
     },
     setUser(state, user) {
       state.user = user
@@ -52,6 +59,7 @@ export default createStore({
       state.user = null;
       state.token = null;
       state.role = null;
+      state.favorites = [];
       localStorage.removeItem('user');
       localStorage.removeItem('token');
       localStorage.removeItem('role');
@@ -107,11 +115,57 @@ export default createStore({
         commit('setLoading', false);
       }
     },
-    async login({ commit }, { email, password }) {
+    async fetchFavorites({ state, commit }) {
+      if (!state.token) { commit('setFavorites', []); return; }
+      try {
+        const res = await fetch(`${API_BASE}/favorites`, {
+          headers: { 'Authorization': `Bearer ${state.token}` }
+        });
+        if (res.status === 404) {
+          // Backend endpoint doesn't exist yet, default to empty favorites
+          commit('setFavorites', []);
+          console.log('no backend')
+          return;
+        }
+        const data = await res.json();
+        console.log('Fetched favorites from server:', data);
+        commit('setFavorites', data.favorites);
+      } catch (e) {
+        // Handle network errors by defaulting to empty favorites
+        commit('setFavorites', []);
+        commit('setError', e);
+      }
+    },
+    async addFavoriteServer({ state, commit, dispatch }, recipeId) {
+      if (!state.token) return;
+      try {
+        const res = await fetch(`${API_BASE}/favorites/${recipeId}`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${state.token}` }
+        });
+        if (!res.ok) throw new Error('Failed to add favorite');
+        commit('addFavorite', recipeId);
+      } catch (e) {
+        commit('setError', e.message || e);
+      }
+    },
+    async removeFavoriteServer({ state, commit }, recipeId) {
+      if (!state.token) return;
+      try {
+        const res = await fetch(`${API_BASE}/favorites/${recipeId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${state.token}` }
+        });
+        if (!res.ok) throw new Error('Failed to remove favorite');
+        commit('removeFavorite', recipeId);
+      } catch (e) {
+        commit('setError', e.message || e);
+      }
+    },
+    async login({ commit, dispatch }, { email, password }) {
       commit('setLoading', true);
       try {
-        // Replace with your backend API endpoint
-        const res = await fetch('http://localhost:3001/api/login', {
+        const res = await fetch(`${API_BASE}/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
@@ -124,6 +178,11 @@ export default createStore({
           localStorage.setItem('user', JSON.stringify(data.user));
           localStorage.setItem('token', data.token);
           localStorage.setItem('role', data.user.role);
+          // Wait for favorites to load before fetching recipe details
+          await dispatch('fetchFavorites');
+          if (this.state.favorites.length > 0) {
+            await dispatch('fetchSavedRecipes');
+          }
           commit('setError', null);
         } else {
           commit('setError', data.error || 'Login failed');
@@ -134,11 +193,10 @@ export default createStore({
         commit('setLoading', false);
       }
     },
-    async register({ commit }, { username, email, password }) {
+    async register({ commit, dispatch }, { username, email, password }) {
       commit('setLoading', true);
       try {
-        // Replace with your backend API endpoint
-        const res = await fetch('http://localhost:3001/api/register', {
+        const res = await fetch(`${API_BASE}/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, email, password })
@@ -151,6 +209,11 @@ export default createStore({
           localStorage.setItem('user', JSON.stringify(data.user));
           localStorage.setItem('token', data.token);
           localStorage.setItem('role', data.user.role);
+          // Wait for favorites to load before fetching recipe details
+          await dispatch('fetchFavorites');
+          if (this.state.favorites.length > 0) {
+            await dispatch('fetchSavedRecipes');
+          }
           commit('setError', null);
         } else {
           commit('setError', data.error || 'Registration failed');
@@ -161,7 +224,7 @@ export default createStore({
         commit('setLoading', false);
       }
     },
-    loadUserFromStorage({ commit }) {
+    loadUserFromStorage({ commit, dispatch, state }) {
       const user = localStorage.getItem('user');
       const token = localStorage.getItem('token');
       const role = localStorage.getItem('role');
@@ -169,6 +232,12 @@ export default createStore({
         commit('setUser', JSON.parse(user));
         commit('setToken', token);
         commit('setRole', role);
+        // Wait for favorites to load, then fetch recipe details only if we have favorites
+        dispatch('fetchFavorites').then(() => {
+          if (state.favorites.length > 0) {
+            dispatch('fetchSavedRecipes');
+          }
+        });
       }
     },
     async getRandomRecipe({ commit }, { router }) {
@@ -216,8 +285,8 @@ export default createStore({
     error: state => state.error,
     isAuthenticated: state => !!state.token,
     favoriteRecipes: state => {
-      // Return recipe objects for favorited IDs
-      return state.recipes.filter(r => state.favorites.includes(r.idMeal))
+      // Return recipe objects for favorited IDs (normalize IDs to string)
+      return state.recipes.filter(r => state.favorites.includes(String(r.idMeal)))
     }
   }
 })

@@ -13,14 +13,14 @@
         id: String
     })
 
-    const store = useStore();
-    const isFavorited = computed(() => store.state.favorites.includes(props.id));
+  const store = useStore();
+  const isFavorited = computed(() => store.state.favorites.includes(String(props.id)));
 
-    function toggleFavorite() {
+    async function toggleFavorite() {
       if (isFavorited.value) {
-        store.commit('removeFavorite', props.id);
+        await store.dispatch('removeFavoriteServer', props.id);
       } else {
-        store.commit('addFavorite', props.id);
+        await store.dispatch('addFavoriteServer', props.id);
       }
     }
 </script>
@@ -32,7 +32,7 @@
   </div>
   <div class="card__avatar">
     <div
-    :style="{ backgroundImage: isFavorited ? 'url(/public/img/heart_full.png)' : 'url(/public/img/heart.png)' }"
+  :style="{ backgroundImage: isFavorited ? 'url(/img/heart_full.png)' : 'url(/img/heart.png)' }"
     @click="toggleFavorite"
     title="Toggle favorite"
     ></div>
@@ -91,13 +91,13 @@
 .card__avatar div {
   width: calc(100% - 50px);
   height: calc(100% - 50px);
-  background-image: url('/public/img/heart.png');
+  background-image: url('/img/heart.png');
   background-size: contain;
   transition: all 0.35s;
 }
 .card__avatar div:hover {
     cursor: pointer;
-  background-image: url('/public/img/heart_full.png');
+  background-image: url('/img/heart_full.png');
   background-size: contain;
 }
 
