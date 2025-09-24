@@ -1,5 +1,11 @@
 import { createStore } from 'vuex'
-const API_BASE = (import.meta && import.meta.env && import.meta.env.VITE_API_URL) || 'http://localhost:3001/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+console.log('Environment check:', {
+  'import.meta.env.VITE_API_URL': import.meta.env.VITE_API_URL,
+  'API_BASE': API_BASE,
+  'All env vars': import.meta.env
+});
 
 export default createStore({
     state: {
