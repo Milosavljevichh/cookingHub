@@ -3,6 +3,7 @@
     let currentPath = useRoute()
 </script>
 <template>  <aside class="sidebar" role="navigation" aria-label="Glavna navigacija">
+  <button id="closeSidebar" @click="$emit('close')" aria-label="Close menu">✕</button>
     <div>
       <div class="brand" aria-hidden="true">
         <div class="logo-placeholder">
@@ -35,6 +36,15 @@
       padding:20px 48px;
       gap:var(gap);
       color: var(--light);
+    }
+
+    #closeSidebar{
+      display:none;
+      background:transparent;
+      border:none;
+      color:var(--light);
+      font-size:1.6rem;
+      margin-bottom:8px;
     }
 
     /* top area: logo + nav */
@@ -113,5 +123,11 @@
       .menu a{ padding:8px 10px; font-size:1rem; text-align:center; white-space:nowrap }
       .user-name{ display:none }
       .bottom{ align-items:center }
+    }
+
+    /* overlay friendly on tablet and below */
+    @media (max-width:1024px){
+      .sidebar{ width:280px; min-width:280px; padding:20px; justify-content: flex-start; gap: 2rem; }
+      #closeSidebar{ display:block }
     }
   </style>

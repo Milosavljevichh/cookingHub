@@ -150,7 +150,6 @@ p{
     margin: 45px 35px 0 35px;
     display: flex;
     flex-direction: row-reverse;
-    padding: 0 35px;
 }
 
 .ingredients{
@@ -226,8 +225,14 @@ tbody td{
     font-weight: bold;
 }
 
+.extra_links{
+    margin: 25px 0 50px 0;
+    display: flex;
+    gap: 15px;
+}
 
-@media (min-width: 320px) and (max-width: 425px) {
+
+@media (min-width: 320px) and (max-width: 1024px) {
 body{
     background-color: red;
 }
@@ -239,8 +244,10 @@ main{
 }
 
 .preperations{
+
+    flex-direction: column-reverse;
     
-    margin: 0;
+    margin-bottom: 25px;
     
     .img_container{
         padding: 0;
@@ -249,6 +256,7 @@ main{
 
     img{
         border-radius: 0;
+        max-width: 100%;
     }
 
     #main_heading{
